@@ -1,16 +1,11 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow
- */
 
-import React, {Fragment} from 'react';
+import React, {Fragment, Component} from 'react';
+import {db, auth} from './firebase/firebase';
 import {
   SafeAreaView,
   StyleSheet,
   ScrollView,
+  FlatList,
   View,
   Text,
   StatusBar,
@@ -23,54 +18,55 @@ import {
   DebugInstructions,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
+import { JournalService } from './service/journal.service'
+import { UserService } from './service/user.service'
 
-const App = () => {
-  return (
-    <Fragment>
-      <StatusBar barStyle="dark-content" />
-      <SafeAreaView>
-        <ScrollView
-          contentInsetAdjustmentBehavior="automatic"
-          style={styles.scrollView}>
-          <Header />
-          {global.HermesInternal == null ? null : (
-            <View style={styles.engine}>
-              <Text style={styles.footer}>Engine: Hermes</Text>
+export default class App extends Component{
+  constructor(props) {
+    super(props);
+    this.journalService = new JournalService(auth,db);
+    this.userService = new UserService(auth,db);
+    this.journals = [];
+    this.journalService.getJournals().then((res)=>{
+      res.forEach((userdoc) => {
+        let info = userdoc.data();
+        console.log(info);
+        this.journals.push(info);
+      });
+      this.setState(prev => {
+        {newData: !prev.newData};
+      });
+    }).catch(msg => console.log(msg));
+  }
+  state = { newData: false };
+  render(){
+    console.log('render');
+    return (
+      <Fragment>
+        <StatusBar barStyle="dark-content" />
+        <SafeAreaView>
+          <ScrollView
+            contentInsetAdjustmentBehavior="automatic"
+            style={styles.scrollView}>
+            <Header />
+            {global.HermesInternal == null ? null : (
+              <View style={styles.engine}>
+                <Text style={styles.footer}>Engine: Hermes</Text>
+              </View>
+            )}
+            <View style={styles.body}>
+              <FlatList
+                data={this.journals}
+                renderItem={({item}) => <Text style={styles.item}>{item.title + ' ' + item.content}</Text>}
+              />
             </View>
-          )}
-          <View style={styles.body}>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Step One</Text>
-              <Text style={styles.sectionDescription}>
-                Edit <Text style={styles.highlight}>App.js</Text> to change this
-                screen and then come back to see your edits.
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>See Your Changes</Text>
-              <Text style={styles.sectionDescription}>
-                <ReloadInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Debug</Text>
-              <Text style={styles.sectionDescription}>
-                <DebugInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Learn More</Text>
-              <Text style={styles.sectionDescription}>
-                Read the docs to discover what to do next:
-              </Text>
-            </View>
-            <LearnMoreLinks />
-          </View>
-        </ScrollView>
-      </SafeAreaView>
-    </Fragment>
-  );
-};
+          </ScrollView>
+        </SafeAreaView>
+      </Fragment>
+    );
+  }
+
+}
 
 const styles = StyleSheet.create({
   scrollView: {
@@ -109,6 +105,9 @@ const styles = StyleSheet.create({
     paddingRight: 12,
     textAlign: 'right',
   },
+  item: {
+    padding: 10,
+    fontSize: 18,
+    height: 44,
+  },
 });
-
-export default App;

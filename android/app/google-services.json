@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "42332351876",
+    "firebase_url": "https://d3journal.firebaseio.com",
+    "project_id": "d3journal",
+    "storage_bucket": "d3journal.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:42332351876:android:8637163a7577b934",
+        "android_client_info": {
+          "package_name": "com.d3journal"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "42332351876-m0a96m8sa6s5cq4noof7hjs4prnbobvd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAaCxLuTwLqK2O8V67DJWraD1dKVjI4rKY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "42332351876-m0a96m8sa6s5cq4noof7hjs4prnbobvd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
