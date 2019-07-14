@@ -28,17 +28,17 @@ export default class App extends Component{
     this.userService = new UserService(auth,db);
     this.journals = [];
     this.journalService.getJournals().then((res)=>{
+      console.log(res);
       res.forEach((userdoc) => {
         let info = userdoc.data();
         console.log(info);
         this.journals.push(info);
       });
-      this.setState(prev => {
-        {newData: !prev.newData};
-      });
+      const posts = this.journals;
+      this.setState({posts});
     }).catch(msg => console.log(msg));
   }
-  state = { newData: false };
+  state = { posts: [] };
   render(){
     console.log('render');
     return (
@@ -56,7 +56,7 @@ export default class App extends Component{
             )}
             <View style={styles.body}>
               <FlatList
-                data={this.journals}
+                data={this.state.posts}
                 renderItem={({item}) => <Text style={styles.item}>{item.title + ' ' + item.content}</Text>}
               />
             </View>
